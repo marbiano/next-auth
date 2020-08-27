@@ -8,8 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "9.5.2",
+    "@welldone-software/why-did-you-render": "^5.0.0-alpha.1",
+    "next": "^9.5.3-canary.23",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-query": "^2.5.5",
+    "react-query-devtools": "^2.4.4"
   }
 }
