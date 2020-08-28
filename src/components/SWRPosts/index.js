@@ -1,17 +1,15 @@
-import { useQuery } from "react-query";
+import useSWR from "swr";
 import { fetchPosts } from "../../lib/api";
 
 const Posts = () => {
-  const { isLoading, data: posts } = useQuery("posts", fetchPosts, {
-    enabled: true,
-  });
+  const { data: posts, error } = useSWR("posts", fetchPosts);
 
-  console.log("loading posts?", isLoading);
-  console.log("RQ rendering posts", posts);
+  console.log("loading posts?", !posts && !error);
+  console.log("SWR rendering posts", posts);
 
   return (
     <div>
-      {isLoading && <div>Loading...</div>}
+      {!posts && !error && <div>Loading...</div>}
       {posts && posts.length > 0 && (
         <ul>
           {posts.map((post) => (
