@@ -1,5 +1,9 @@
 export default (req, res) => {
-  console.log(req.headers.authorization);
-  res.statusCode = 200;
-  res.json([{ title: "First post" }, { title: "Second post" }]);
+  if (req.headers.authorization === "Bearer testing123") {
+    res.statusCode = 200;
+    res.json([{ title: "First post" }, { title: "Second post" }]);
+  } else {
+    res.statusCode = 403;
+    res.json({ error: "Forbidden" });
+  }
 };

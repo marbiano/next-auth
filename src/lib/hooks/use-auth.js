@@ -1,13 +1,10 @@
 import { useState, useEffect, useContext, createContext } from "react";
-import { useQuery } from "react-query";
-import { fetchCurrentUser } from "../lib/api";
+import { queryCache } from "react-query";
+import { fetchCurrentUser } from "../api";
 
-const initialAuth = {
-  token: undefined,
-  user: undefined,
-};
+const DEMO_TOKEN = "testing123";
 
-const AuthContext = createContext(initialAuth);
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const auth = useProvideAuth();
@@ -20,29 +17,26 @@ export const useAuth = () => {
 
 const useProvideAuth = () => {
   const [token, setToken] = useState();
-  const { data: user } = useQuery("user", fetchCurrentUser, {
-    enabled: token,
-  });
 
   const login = () => {
-    const token = "testing123";
-    localStorage.setItem("token", token);
-    setToken(token);
+    localStorage.setItem("token", DEMO_TOKEN);
+    setToken(DEMO_TOKEN);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setToken(false);
+    queryCache.removeQueries(({ queryKey }) => {
+      return true;
+    });
   };
 
   useEffect(() => {
-    console.log("- - - effect: set initial token - - -");
     setToken(localStorage.getItem("token") || false);
   }, []);
 
   return {
     token,
-    user,
     login,
     logout,
   };
