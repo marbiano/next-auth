@@ -1,21 +1,17 @@
 import { useQuery } from "react-query";
-import { useAuth } from "../../lib/hooks/use-auth";
-import { fetchCurrentUser, fetchPosts } from "../../lib/api";
+import { fetchPosts } from "../../lib/api";
 
 const Posts = () => {
-  const { token } = useAuth();
-
-  const { data: user } = useQuery("user", fetchCurrentUser, {
-    enabled: token,
+  const { isLoading, data: posts } = useQuery("posts", fetchPosts, {
+    enabled: true,
   });
 
-  const { data: posts } = useQuery("posts", fetchPosts, {
-    enabled: user,
-  });
+  console.log("loading posts?", isLoading);
+  console.log("rendering posts", posts);
 
   return (
     <div>
-      {user && <h1>{user.firstName}'s Posts</h1>}
+      {isLoading && <div>Loading...</div>}
       {posts && posts.length > 0 && (
         <ul>
           {posts.map((post) => (
@@ -26,5 +22,7 @@ const Posts = () => {
     </div>
   );
 };
+
+Posts.whyDidYouRender = true;
 
 export default Posts;
